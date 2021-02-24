@@ -1,0 +1,54 @@
+def airportConnections(airports, routes, startingAirport):
+    # Write your code here.
+	matrix=[]
+	def updatematrix():
+		matrix[airports.index(startingAirport)][airports.index(startingAirport)]=1
+		for end in range(len(routes)):
+			matrix[airports.index(routes[end][0])][airports.index(routes[end][1])]=1
+		
+		for col in range(len(matrix)):
+			for row in range(len(matrix[col])):
+				if(matrix[col][row]==1):
+					for dest in range(len(matrix[row])):
+						if(matrix[row][dest]==1):matrix[col][dest]=1
+							
+	for col in range(len(airports)):
+		rows=[]
+		for row in range(len(airports)):
+			rows.append(0)
+		matrix.append(rows)
+    pass
+
+	for col in range(len(matrix)):
+		countzero=0;
+		while(matrix[col].count(0) > countzero):
+			updatematrix()
+			countzero=matrix[col].count(0) 
+	
+	print(">>>",matrix[airports.index(startingAirport)])
+	#print(routes)
+	
+	countones=0
+	countadded=0		
+	
+	while(   matrix[airports.index(startingAirport)].count(1) > countones and matrix[airports.index(startingAirport)].count(0) >0  ):
+		fetchmaxaptfwd=0
+		markdest=airports.index(startingAirport)
+		for dest in range(len(matrix[airports.index(startingAirport)])):
+			#print('' markdest,dest,fetchmaxaptfwd )
+			#print(">><<>><<",matrix[airports.index(startingAirport)][dest],[startingAirport,airports[dest]],matrix[dest].count(1))
+			if(matrix[airports.index(startingAirport)][dest]==0 and ( [startingAirport,airports[dest]] not in routes) and matrix[dest].count(1) >= fetchmaxaptfwd  ):
+				fetchmaxaptfwd=matrix[dest].count(1)
+				markdest=dest			
+		#if(markdest!=airports.index(startingAirport)):
+		routes.append([startingAirport,airports[markdest]])
+		countadded=countadded+1
+		countones=matrix[airports.index(startingAirport)].count(1)
+		updatematrix()
+				
+	print(routes[-countadded:])
+	print(matrix[airports.index(startingAirport)])
+	print()
+	print(matrix)
+	print(countadded)
+	return countadded
